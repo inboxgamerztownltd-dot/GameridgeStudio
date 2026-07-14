@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameridge Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B1035;
+    --bg-alt: #150C29;
+    --bg-card: #241245;
+    --pink: #FF3E7F;
+    --yellow: #FFD23F;
+    --mint: #5EEAD4;
+    --text: #F5F0FF;
+    --text-dim: #B3A6D9;
+    --border: rgba(245,240,255,0.12);
+    --radius-lg: 28px;
+    --radius-sm: 14px;
+  }
+
+  *{margin:0; padding:0; box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+
+  h1,h2,h3{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    line-height:1.05;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mint);
+  }
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  :focus-visible{
+    outline:3px solid var(--mint);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(21,12,41,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 32px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Fredoka', sans-serif;
+    font-size:1.25rem;
+    font-weight:700;
+  }
+
+  .logo-mark{
+    width:34px; height:34px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--pink), var(--yellow));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem;
+    transform:rotate(-6deg);
+  }
+
+  .nav-links{
+    display:flex;
+    gap:36px;
+    font-size:0.95rem;
+    font-weight:500;
+  }
+
+  .nav-links a{
+    position:relative;
+    padding-bottom:4px;
+    color:var(--text-dim);
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0; height:2px;
+    background:var(--pink);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+
+  .nav-cta{
+    background:var(--pink);
+    color:#1B1035;
+    font-weight:700;
+    padding:10px 20px;
+    border-radius:100px;
+    font-size:0.9rem;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .nav-cta:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(255,62,127,0.35);}
+
+  .menu-toggle{display:none; background:none; border:none; color:var(--text); font-size:1.6rem; cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:100px 0 70px;
+    overflow:hidden;
+  }
+
+  .hero::before{
+    content:'';
+    position:absolute;
+    top:-200px; right:-160px;
+    width:520px; height:520px;
+    background:radial-gradient(circle, rgba(255,62,127,0.28), transparent 70%);
+    filter:blur(10px);
+    pointer-events:none;
+  }
+  .hero::after{
+    content:'';
+    position:absolute;
+    bottom:-220px; left:-140px;
+    width:480px; height:480px;
+    background:radial-gradient(circle, rgba(94,234,212,0.18), transparent 70%);
+    pointer-events:none;
+  }
+
+  .hero-inner{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+    position:relative;
+    z-index:1;
+  }
+
+  .hero h1{
+    font-size:clamp(2.6rem, 5vw, 4rem);
+    margin:18px 0 22px;
+  }
+  .hero h1 .hl{
+    color:var(--yellow);
+    -webkit-text-stroke:0;
+  }
+
+  .hero p{
+    color:var(--text-dim);
+    font-size:1.08rem;
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+
+  .hero-actions{display:flex; gap:16px; flex-wrap:wrap;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:100px;
+    font-weight:700;
+    font-size:0.98rem;
+    cursor:pointer;
+    border:none;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary{background:var(--pink); color:#1B1035;}
+  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 10px 26px rgba(255,62,127,0.4);}
+  .btn-ghost{background:transparent; color:var(--text); border:1.5px solid var(--border);}
+  .btn-ghost:hover{border-color:var(--mint); color:var(--mint); transform:translateY(-3px);}
+
+  /* Hero cartridge cluster */
+  .hero-art{
+    position:relative;
+    height:380px;
+  }
+  .float-chip{
+    position:absolute;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.35);
+    animation:drift 6s ease-in-out infinite;
+  }
+  .chip-1{width:150px; height:190px; top:10px; left:70px; background:linear-gradient(160deg, var(--pink), #C22B5D); transform:rotate(-9deg); animation-delay:0s;}
+  .chip-2{width:130px; height:170px; top:120px; right:30px; background:linear-gradient(160deg, var(--yellow), #D9A400); transform:rotate(8deg); animation-delay:1.2s;}
+  .chip-3{width:110px; height:140px; bottom:0; left:10px; background:linear-gradient(160deg, var(--mint), #1E9E8B); transform:rotate(-4deg); animation-delay:2.1s;}
+  .float-chip::before{
+    content:'';
+    position:absolute;
+    top:16px; left:16px; right:16px;
+    height:34%;
+    background:rgba(21,12,41,0.55);
+    border-radius:10px;
+  }
+
+  @keyframes drift{
+    0%,100%{transform-origin:center; translate:0 0;}
+    50%{translate:0 -14px;}
+  }
+
+  .stat-bar{
+    display:flex;
+    gap:0;
+    margin-top:64px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .stat{
+    flex:1;
+    padding:22px 0;
+    text-align:center;
+    border-right:1px solid var(--border);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.7rem;
+    font-weight:600;
+    color:var(--yellow);
+  }
+  .stat .label{
+    font-size:0.78rem;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-top:4px;
+  }
+
+  /* ---------- GAMES / CARTRIDGE CARDS ---------- */
+  .section{padding:100px 0;}
+  .section-head{
+    max-width:560px;
+    margin-bottom:56px;
+  }
+  .section-head h2{
+    font-size:clamp(2rem, 3.4vw, 2.7rem);
+    margin-top:12px;
+  }
+  .section-head p{color:var(--text-dim); margin-top:14px;}
+
+  .game-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:26px;
+  }
+
+  .cartridge{
+    position:relative;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:18px 18px 24px;
+    transition:transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  }
+  .cartridge:hover{
+    transform:translateY(-8px) rotate(-1deg);
+    box-shadow:0 22px 44px rgba(0,0,0,0.4);
+    border-color:var(--tab-color, var(--pink));
+  }
+
+  .cart-tab{
+    height:120px;
+    border-radius:16px;
+    background:var(--tab-color, var(--pink));
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    padding:12px;
+    overflow:hidden;
+  }
+  .cart-tab .ridges{
+    position:absolute;
+    top:10px; right:10px;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .cart-tab .ridges span{
+    width:26px; height:3px;
+    background:rgba(21,12,41,0.35);
+    border-radius:2px;
+  }
+  .cart-tab .glyph{
+    font-family:'Fredoka', sans-serif;
+    font-size:2.6rem;
+    color:rgba(21,12,41,0.85);
+  }
+
+  .new-badge{
+    position:absolute;
+    top:-10px; right:14px;
+    background:var(--yellow);
+    color:#1B1035;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:8px;
+    transform:rotate(6deg);
+    box-shadow:0 6px 14px rgba(0,0,0,0.3);
+  }
+
+  .cart-notch{
+    width:36px; height:8px;
+    background:var(--bg);
+    border-radius:0 0 6px 6px;
+    margin:0 auto;
+  }
+
+  .cartridge h3{
+    font-size:1.15rem;
+    margin:16px 0 8px;
+  }
+  .cartridge p{
+    color:var(--text-dim);
+    font-size:0.9rem;
+    min-height:56px;
+  }
+
+  .platform-links{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+  }
+  .platform-links a{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:9px 0;
+    border-radius:10px;
+    background:var(--bg-alt);
+    font-size:0.8rem;
+    font-weight:600;
+    border:1px solid var(--border);
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+  .platform-links a:hover{border-color:var(--mint); color:var(--mint);}
+
+  /* ---------- CTA BANNER ---------- */
+  .banner{
+    background:var(--bg-alt);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:90px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .banner::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(-45deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 22px);
+  }
+  .banner-inner{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .banner h2{font-size:clamp(1.8rem, 3.2vw, 2.4rem); max-width:520px;}
+  .banner-tags{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+  }
+  .banner-tags span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    padding:6px 12px;
+    border:1px solid var(--border);
+    border-radius:100px;
+    color:var(--text-dim);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:44px 0;}
+  .footer-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-links{display:flex; gap:26px; font-size:0.88rem; color:var(--text-dim);}
+  .footer-links a:hover{color:var(--text);}
+  .copyright{font-size:0.82rem; color:var(--text-dim);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-art{height:280px; margin-top:20px;}
+    .game-grid{grid-template-columns:repeat(2, 1fr);}
+  }
+
+  @media (max-width:640px){
+    .nav-links, .nav-cta{display:none;}
+    .menu-toggle{display:block;}
+    .stat-bar{flex-wrap:wrap;}
+    .stat{flex:1 1 50%; border-bottom:1px solid var(--border);}
+    .game-grid{grid-template-columns:1fr;}
+    .section{padding:64px 0;}
+    .banner-inner{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo">
+      <span class="logo-mark">GS</span>
+      Gameridge Studio
+    </a>
+    <ul class="nav-links">
+      <li><a href="#games">Games</a></li>
+      <li><a href="#partner">Partner</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Work with us</a>
+    <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <span class="eyebrow"></span>
+      <h1>We build games you<br>open <span class="hl">one more time.</span></h1>
+      <p>Gameridge Studio crafting fast, funny, unmistakably tactile mobile games — from first prototype to global launch.</p>
+      <div class="hero-actions">
+        <a href="#games" class="btn btn-primary">Browse games</a>
+        <a href="#contact" class="btn btn-ghost">Work with us</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="float-chip chip-1"></div>
+      <div class="float-chip chip-2"></div>
+      <div class="float-chip chip-3"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stat-bar">
+      <div class="stat"><div class="num">06</div><div class="label">Games shipped</div></div>
+      <div class="stat"><div class="num">02</div><div class="label">Platforms</div></div>
+      <div class="stat"><div class="num">3.1M</div><div class="label">Downloads</div></div>
+      <div class="stat"><div class="num">2024</div><div class="label">Founded</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="games">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Our portfolio</span>
+      <h2>Games worth a second look</h2>
+      <p>A handful of the titles we've shipped — each one small, sharp, and built to be played in short, addictive bursts.</p>
+    </div>
+
+    <div class="game-grid">
+
+      <article class="cartridge" style="--tab-color:var(--pink)">
+        <div class="new-badge">NEW</div>
+        <div class="cart-tab">
+          <div class="ridges"><span></span><span></span><span></span></div>
+          <span class="glyph">🐀</span>
+        </div>
+        <div class="cart-notch"></div>
+        <h3>Rat Prison Escape</h3>
+        <p>Guide a scrappy rat through a 3D prison break, dodging guards and sniffing out shortcuts.</p>
+        <div class="platform-links">
+          <a href="#">Android</a>
+          <a href="#">iOS</a>
+        </div>
+      </article>
+
+      <article class="cartridge" style="--tab-color:var(--yellow)">
+        <div class="cart-tab">
+          <div class="ridges"><span></span><span></span><span></span></div>
+          <span class="glyph">🚀</span>
+        </div>
+        <div class="cart-notch"></div>
+        <h3>Comet Sprint</h3>
+        <p>A one-thumb runner where you outpace a collapsing comet field, level after level.</p>
+        <div class="platform-links">
+          <a href="#">Android</a>
+          <a href="#">iOS</a>
+        </div>
+      </article>
+
+      <article class="cartridge" style="--tab-color:var(--mint)">
+        <div class="cart-tab">
+          <div class="ridges"><span></span><span></span><span></span></div>
+          <span class="glyph">🧩</span>
+        </div>
+        <div class="cart-notch"></div>
+        <h3>Knotwork</h3>
+        <p>Untangle glowing threads across hand-drawn puzzle boards that get stranger the deeper you go.</p>
+        <div class="platform-links">
+          <a href="#">Android</a>
+          <a href="#">iOS</a>
+        </div>
+      </article>
+
+      <article class="cartridge" style="--tab-color:var(--pink)">
+        <div class="cart-tab">
+          <div class="ridges"><span></span><span></span><span></span></div>
+          <span class="glyph">🏁</span>
+        </div>
+        <div class="cart-notch"></div>
+        <h3>Drift Kingdom</h3>
+        <p>Arcade-physics kart racing across five miniature kingdoms, built for quick weekend tournaments.</p>
+        <div class="platform-links">
+          <a href="#">Android</a>
+          <a href="#">iOS</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="banner" id="partner">
+  <div class="container banner-inner">
+    <div>
+      <span class="eyebrow">Get in touch</span>
+      <h2>Open to publishing deals, brand partnerships, and licensing.</h2>
+      <div class="banner-tags">
+        <span>Publishing</span>
+        <span>Brand partnerships</span>
+        <span>Licensing</span>
+        <span>Co-development</span>
+      </div>
+    </div>
+    <a href="mailto:hello@novabytegames.example" class="btn btn-primary" id="contact">Email the team</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <a href="#" class="logo"><span class="logo-mark" style="width:26px;height:26px;font-size:0.85rem;">GS</span>Gameridge Studio</a>
+    <ul class="footer-links">
+      <li><a href="#games">Games</a></li>
+      <li><a href="#partner">Partner</a></li>
+      <li><a href="mailto:hello@novabytegames.example">Contact</a></li>
+      <li><a href="#">Privacy policy</a></li>
+    </ul>
+    <span class="copyright">© 2026 Gameridge Studio. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.cssText += open ? '' : 'position:absolute; top:64px; left:0; right:0; flex-direction:column; background:var(--bg-alt); padding:24px 32px; gap:20px;';
+  });
+</script>
+
+</body>
+</html>
